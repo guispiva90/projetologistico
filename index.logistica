@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUB DE PROJETOS LOGÍSTICOS | Mediação EaD 80/20 & Engenharia de Projetos</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cyan: '#06b6d4',
+              blue: '#2563eb',
+              dark: '#080c14',
+              surface: '#0f172a',
+              card: '#1e293b',
+              border: '#334155',
+              accent: '#38bdf8',
+              emerald: '#10b981',
+              amber: '#f59e0b',
+              rose: '#f43f5e',
+              violet: '#8b5cf6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+    .glow-cyan {
+      box-shadow: 0 0 30px -8px rgba(6, 182, 212, 0.28);
+    }
+    .grid-pattern {
+      background-size: 28px 28px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-brand-dark text-slate-100 min-h-screen flex flex-col font-sans selection:bg-brand-cyan selection:text-black">
+
+  <!-- TOP HEADER / BRANDING & DUAL VIEW MODE -->
+  <header class="border-b border-brand-border bg-brand-surface/95 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-xl bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-cyan-950/60 ring-1 ring-cyan-400/30">
+          <i data-lucide="network" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-0.5">
+            <span class="text-[10px] font-mono font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/80">SENAI EaD • 80/20</span>
+            <span class="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50 font-mono">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>Síncrono Online → Lab Presencial
+            </span>
+          </div>
+          <h1 class="text-base sm:text-lg md:text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            HUB DE PROJETOS LOGÍSTICOS
+            <span class="text-slate-400 text-xs sm:text-sm font-normal hidden lg:inline">| Mediação Didática & Metodologia de Projetos</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Controls: Perspective Switcher & Case/Notebook -->
+      <div class="flex flex-wrap items-center gap-2.5 self-start md:self-center">
+        <!-- View Mode Switch -->
+        <div class="bg-slate-900 p-1 rounded-xl border border-brand-border flex items-center text-xs">
+          <button id="viewBtnStudent" onclick="setViewMode('student')" class="px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-cyan-600 text-white font-medium shadow-sm">
+            <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Visão Aluno
+          </button>
+          <button id="viewBtnTeacher" onclick="setViewMode('teacher')" class="px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white">
+            <i data-lucide="presentation" class="w-3.5 h-3.5"></i> Roteiro Docente
+          </button>
+        </div>
+
+        <!-- BioFrio Case Summary Modal Trigger -->
+        <button onclick="openGlobalCaseModal()" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-brand-card hover:bg-slate-700/80 border border-brand-border text-slate-200 transition-all flex items-center gap-1.5">
+          <i data-lucide="snowflake" class="w-3.5 h-3.5 text-cyan-400"></i> Caso BioFrio
+        </button>
+
+        <!-- Project Notes Drawer Trigger -->
+        <button onclick="toggleNotesDrawer()" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-brand-card hover:bg-slate-700/80 border border-brand-border text-cyan-300 transition-all flex items-center gap-1.5 relative">
+          <i data-lucide="file-pen" class="w-3.5 h-3.5 text-cyan-400"></i> Caderno do Projeto
+          <span id="notesBadge" class="hidden w-2 h-2 rounded-full bg-cyan-400 absolute -top-1 -right-1"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 80/20 Pedagogical Bridge Ribbon -->
+    <div class="bg-slate-900/90 border-t border-brand-border/60 px-4 sm:px-6 lg:px-8 py-2">
+      <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
+        <div class="flex items-center gap-2 text-slate-300">
+          <span class="font-mono text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i> Ponte EaD 80/20:
+          </span>
+          <span class="text-slate-300 text-[11px] sm:text-xs">
+            Nas <strong>aulas ao vivo online</strong>, domina-se a engenharia do projeto com o caso <strong>BioFrio PharmaLog</strong>; no <strong>laboratório presencial</strong>, os alunos aplicam na prática na <strong>LogMais Sul</strong>.
+          </span>
+        </div>
+        <div id="docentModeBanner" class="hidden text-[11px] font-mono text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60 items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> MODO DOCENTE ATIVADO: Perguntas norteadoras e critérios de avaliação destacados
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB NAVIGATION BAR -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-brand-border/40 overflow-x-auto no-scrollbar">
+      <nav class="flex space-x-1.5 py-2.5" id="navTabs" aria-label="Aulas do Projeto">
+        <!-- Injected via JavaScript -->
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- HERO MODULE BANNER -->
+    <section id="moduleHeroBanner" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-brand-surface border border-brand-border/80 relative overflow-hidden glow-cyan grid-pattern">
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div class="space-y-2 max-w-3xl">
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="heroBadgeLesson" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">AULA 1</span>
+            <span class="text-xs text-slate-400 font-mono flex items-center gap-1">
+              <i data-lucide="video" class="w-3.5 h-3.5 text-cyan-400"></i> Aula Síncrona Online (Conceito)
+            </span>
+            <span class="text-slate-600">→</span>
+            <span class="text-xs text-emerald-400 font-mono flex items-center gap-1">
+              <i data-lucide="wrench" class="w-3.5 h-3.5"></i> 4h Presenciais no Laboratório SENAI
+            </span>
+          </div>
+          <h2 id="heroTitle" class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">Diagnóstico Logístico & Formulação do Problema Científico</h2>
+          <p id="heroSubtitle" class="text-xs sm:text-sm text-slate-300 leading-relaxed">Domine o rigor metodológico de transição de simples queixas empíricas para a declaração formal da situação-problema por critérios de engenharia.</p>
+        </div>
+
+        <!-- Quick Action Navigators -->
+        <div class="flex flex-wrap lg:flex-col gap-2 shrink-0">
+          <button onclick="scrollToSection('secao-conceitos-projeto')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-brand-card hover:bg-slate-700/80 border border-brand-border text-slate-200 transition flex items-center gap-2">
+            <i data-lucide="book-marked" class="w-4 h-4 text-cyan-400"></i> Teoria de Projetos
+          </button>
+          <button onclick="scrollToSection('secao-ferramenta-interativa')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white transition flex items-center gap-2 shadow-lg shadow-cyan-950">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4"></i> Simulador Interativo
+          </button>
+          <button onclick="scrollToSection('secao-ponte-laboratorio')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-700 text-emerald-300 transition flex items-center gap-2">
+            <i data-lucide="door-open" class="w-4 h-4 text-emerald-400"></i> Missão Presencial SENAI
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DYNAMIC LESSON BODY -->
+    <div id="dynamicLessonContent" class="space-y-8">
+      <!-- Injected via JavaScript -->
+    </div>
+
+  </main>
+
+  <!-- NOTES DRAWER (Local Storage Persistent Project Notebook) -->
+  <aside id="notesDrawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-96 bg-brand-surface border-l border-brand-border shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <div class="p-4 border-b border-brand-border flex items-center justify-between bg-slate-900">
+      <div class="flex items-center gap-2">
+        <i data-lucide="file-pen" class="w-5 h-5 text-cyan-400"></i>
+        <div>
+          <h3 class="text-sm font-bold text-white">Caderno de Trabalho do Projeto</h3>
+          <span class="text-[10px] text-slate-400 font-mono">Salvo automaticamente no navegador</span>
+        </div>
+      </div>
+      <button onclick="toggleNotesDrawer()" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    
+    <div class="p-4 flex-1 flex flex-col space-y-3 overflow-y-auto">
+      <div class="p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-800/60 text-xs text-cyan-200">
+        Utilize este espaço durante a aula ao vivo para estruturar suas anotações, hipóteses e respostas que levará para o encontro presencial do laboratório.
+      </div>
+      
+      <div>
+        <label class="block text-xs font-mono text-slate-400 mb-1">Selecione o Encontro:</label>
+        <select id="notesLessonSelector" onchange="loadCurrentLessonNote()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+          <option value="1">Aula 1: Diagnóstico & Declaração do Problema</option>
+          <option value="2">Aula 2: Benchmarking & Definição de KPIs</option>
+          <option value="3">Aula 3: Análise Causal (6M) & Alternativas</option>
+          <option value="4">Aula 4: Viabilidade Financeira & Plano 5W2H</option>
+          <option value="5">Aula 5: Normas ABNT & Escrita Científica</option>
+          <option value="6">Aula 6: Pitch Executivo & Defesa na Banca</option>
+        </select>
+      </div>
+
+      <div class="flex-1 flex flex-col">
+        <label class="block text-xs font-mono text-slate-400 mb-1">Anotações Técnicas da Equipe:</label>
+        <textarea id="projectNotesText" oninput="saveCurrentLessonNote()" placeholder="Digite aqui dados coletados, justificativas, fórmulas ou reflexões do projeto..." class="flex-1 w-full bg-slate-900 border border-brand-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 font-mono leading-relaxed resize-none"></textarea>
+      </div>
+
+      <div class="pt-2 border-t border-brand-border flex items-center justify-between text-[11px] text-slate-400">
+        <span id="saveStatusIndicator" class="flex items-center gap-1 text-emerald-400">
+          <i data-lucide="check" class="w-3.5 h-3.5"></i> Salvo localmente
+        </span>
+        <button onclick="copyCurrentNoteToClipboard()" class="hover:text-cyan-400 flex items-center gap-1 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar texto
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MODAL: CONTEXTO GERAL BIOFRIO PHARMALOG -->
+  <div id="globalCaseModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-brand-surface border border-brand-border max-w-3xl w-full rounded-2xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeGlobalCaseModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="p-2.5 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800">
+          <i data-lucide="snowflake" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-cyan-400">Cenário Didático Paralelo Síncrono</span>
+          <h3 class="text-lg font-bold text-white">BioFrio PharmaLog S/A • Operações em Cadeia Fria</h3>
+        </div>
+      </div>
+      <div class="space-y-3.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+        <p><strong class="text-white">Perfil Operacional:</strong> Operador Logístico Especializado (3PL) com centro de distribuição regulatório em Campinas/SP e 3 plataformas de cross-docking refrigeradas em Curitiba, Porto Alegre e Florianópolis. Atende mais de 180 hospitais, redes de vacinação e laboratórios oncológicos.</p>
+        <p><strong class="text-white">O Desafio Técnico:</strong> Produtos biológicos termolábeis exigem estrito cumprimento da Resolução <strong>RDC nº 430/2020 da ANVISA</strong> (faixa de 2°C a 8°C e ultracongelados a -20°C). Qualquer excursão de temperatura acima de 30 minutos inviabiliza os medicamentos quimioterápicos, acarretando descarte mandatório e penalidades severas.</p>
+        <p><strong class="text-white">Papel dos Alunos nas Aulas ao Vivo:</strong> Atuar como consultores de engenharia logística, dominando cada ferramenta metodológica com os dados da BioFrio PharmaLog, para que cheguem ao laboratório presencial plenamente capacitados a resolver a situação análoga da LogMais Sul.</p>
+      </div>
+      <div class="mt-6 pt-4 border-t border-brand-border flex justify-end">
+        <button onclick="closeGlobalCaseModal()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs rounded-xl transition">
+          Retornar à Aula Síncrona
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-brand-border bg-brand-surface py-5 mt-14 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="font-mono text-cyan-400 font-semibold">SENAI EaD</span>
+        <span>• Formação Técnica em Logística • Metodologia Integrada 80/20 (100h)</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400 text-[11px] font-mono">
+        <span>Aulas Online: Teoria e Métodos</span>
+        <span>•</span>
+        <span>Laboratório: Prática de Soluções</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CORE LOGIC & LESSONS MASTER DATA -->
+  <script>
+    // MASTER DATA FOR THE 6 CLASSES - DEEP PROJECT CONCEPTS + BIOFRIO DATA + TOOLS
+    const lessonsData = [
+      {
+        id: 1,
+        tabName: "1. Diagnóstico & Problema",
+        heroBadge: "AULA 1 • ENCONTRO SÍNCRONO 1",
+        title: "Diagnóstico Logístico & Formulação do Problema Científico",
+        subtitle: "Aprenda a converter queixas vagas em uma Declaração Formal de Escopo (Project Scope Statement), aplicando Linha de Base, SIPOC e a Lei de Pareto com dados reais.",
+        
+        // CONCEITOS FUNDAMENTAIS DE PROJETOS DETALHADOS
+        deepConcepts: [
+          {
+            tag: "Gestão de Escopo",
+            title: "Declaração de Escopo e Linha de Base (Baseline)",
+            icon: "file-text",
+            detail: "Em projetos logísticos de alta precisão, uma intervenção não pode ter escopo difuso. A Linha de Base (Baseline) congela o estado inicial mensurável da operação (tempo, custo, taxa de refugo) contra o qual todo o sucesso futuro do projeto será aferido perante auditorias.",
+            projectImpact: "Evita o 'Scope Creep' (expansão descontrolada de escopo) e estabelece limites contratuais nítidos de entrega."
+          },
+          {
+            tag: "Metodologia Científica",
+            title: "Sintoma Operacional vs. Problema Raiz",
+            icon: "filter",
+            detail: "Um sintoma é a manifestação exterior perceptível (ex: 'o hospital reclamou que a insulina chegou quente'). O problema científico é a falha no sistema que gerou a condição (ex: 'tempo de permanência na doca de staging sem controle térmico excede em 48 minutos a tolerância termolábil').",
+            projectImpact: "Impede que a equipe gaste orçamento combatendo efeitos cosméticos em vez da falha estrutural."
+          },
+          {
+            tag: "Formulação do Problema",
+            title: "Critérios SMART e Formulação da Pergunta Diretriz",
+            icon: "target",
+            detail: "A pergunta-chave do projeto deve ser Específica, Mensurável, Atingível, Relevante e Temporal (SMART). Deve responder: 'De que maneira podemos reduzir o tempo de doca da expedição para manter as cargas entre 2°C e 8°C durante o primeiro semestre?'",
+            projectImpact: "Guia todas as etapas subsequentes do projeto sem desvios conceituais."
+          },
+          {
+            tag: "Estratificação da Qualidade",
+            title: "Princípio de Pareto (Lei 80/20) e Coleta Estruturada",
+            icon: "bar-chart-3",
+            detail: "A ordenação decrescente de não conformidades com cálculo da curva percentual acumulada. Revela analiticamente que aproximadamente 20% das naturezas de falhas são responsáveis por cerca de 80% do prejuízo financeiro ou das perdas de carga.",
+            projectImpact: "Focaliza a alocação de recursos financeiros e humanos onde o retorno operacional é máximo."
+          }
+        ],
+
+        // CAPACIDADES TRABALHADAS (SENAI)
+        capabilities: [
+          {
+            type: "Técnica",
+            name: "Avaliar alternativas para solução de situações-problema",
+            application: "Estruturar hipóteses diagnósticas divergentes a partir do cruzamento de relatórios de telemetria e faturas comerciais."
+          },
+          {
+            type: "Técnica",
+            name: "Selecionar ferramentas da qualidade coerentes com a situação",
+            application: "Justificar por que utilizar a Folha de Verificação associada ao Pareto na triagem e o SIPOC para delimitar a fronteira do processo."
+          },
+          {
+            type: "Socioemocional",
+            name: "Iniciativa e Gestão de Tempo no Levantamento",
+            application: "Liderar a filtragem de dados brutos e entregar o diagnóstico consolidado dentro do prazo acordado com o cliente."
+          },
+          {
+            type: "Socioemocional",
+            name: "Organização e Clareza na Transmissão de Evidências",
+            application: "Construir tabelas higienizadas, com unidades de medida oficiais e fontes citadas sem margem para interpretação ambígua."
+          }
+        ],
+
+        // ESTUDO DE CASO PARALELO SÍNCRONO: BIOFRIO PHARMALOG
+        caseStudy: {
+          scenarioTitle: "Dossiê Operacional: 6 Meses de Excursões Térmicas na BioFrio",
+          description: "No último semestre, o centro de cross-docking da BioFrio registrou 184 ocorrências críticas de devoluções de vacinas e quimioterápicos. A diretoria supunha genericamente que os caminhões refrigerados estavam com defeito. A consultoria técnica realizou a coleta e estratificação rigorosa:",
+          tableHeaders: ["Código / Falha Registrada", "Etapa Operacional", "Ocorrências", "% Relativa", "% Acumulada"],
+          tableRows: [
+            ["F1: Doca de staging sem climatização rápida", "Expedição", "98", "53.2%", "53.2%"],
+            ["F2: Selagem inadequada de caixas com gelox", "Montagem Embalagem", "46", "25.0%", "78.2%"],
+            ["F3: Erro de conferência manual de lote/temperatura", "Conferência Doca", "21", "11.4%", "89.6%"],
+            ["F4: Demora no trânsito urbano (Last-Mile)", "Transporte Externo", "12", "6.5%", "96.1%"],
+            ["F5: Falha mecânica no compressor do baú", "Transporte Externo", "7", "3.9%", "100.0%"]
+          ],
+          analyticalInsight: "Conclusão Técnica da Lei de Pareto: As falhas F1 e F2 (Doca e Selagem) respondem por 78,2% de todas as quebras térmicas. A suspeita da diretoria sobre os caminhões (F5) representa menos de 4% do problema. O escopo do projeto está cientificamente delimitado nas etapas internas de expedição."
+        },
+
+        // FERRAMENTA INTERATIVA
+        interactiveToolId: "pareto-simulator",
+        interactiveToolTitle: "Simulador Dinâmico de Pareto & Estratificação de Falhas",
+        interactiveToolDesc: "Edite as quantidades de ocorrências abaixo para recalcular dinamicamente os percentuais e comprovar a distribuição 80/20:",
+
+        // PONTE PEDAGÓGICA PARA O LABORATÓRIO PRESENCIAL
+        labMission: {
+          title: "Missão no Laboratório Presencial SENAI (Caso LogMais Sul)",
+          steps: [
+            "Transposição Prática: Assim como filtramos os dados de temperatura da BioFrio, no laboratório sua equipe receberá o Dossiê LogMais Sul com reclamações de atrasos, divergências e avarias de alimentos secos e refrigerados.",
+            "Aplicação do SIPOC: Desenhar no papel kraft ou software o mapa SIPOC (Suppliers, Inputs, Process, Outputs, Customers) delimitando exatamente onde o processo da LogMais Sul perde rendimento.",
+            "Entrega Esperada: Elaborar a Declaração Formal da Situação-Problema acompanhada de no mínimo 2 evidências quantitativas auditadas e o Pareto inicial."
+          ],
+          docentQuestions: [
+            "Quais dados provam que esta situação é um problema real e não uma oscilação sazonal comum?",
+            "Qual é o sintoma que o cliente percebe e qual é a falha do processo que a equipe precisa delimitar?",
+            "Por que a ferramenta da qualidade escolhida é a mais adequada para este momento?"
+          ]
+        }
+      },
+
+      {
+        id: 2,
+        tabName: "2. Pesquisa, Benchmarking & KPIs",
+        heroBadge: "AULA 2 • ENCONTRO SÍNCRONO 2",
+        title: "Metodologia Científica, Benchmarking & Arquitetura de Indicadores",
+        subtitle: "Aprenda a estruturar a matriz de pesquisa aplicada, aplicar a metodologia de Benchmarking de Robert Camp e formular fichas técnicas de KPIs com rigor paramétrico.",
+
+        deepConcepts: [
+          {
+            tag: "Epistemologia de Projetos",
+            title: "Tipologia e Classificação da Pesquisa em Logística",
+            icon: "compass",
+            detail: "Um projeto técnico no SENAI caracteriza-se quanto à Natureza como Pesquisa Aplicada (busca solucionar problema concreto); quanto à Abordagem como Quali-Quantitativa (combina dados numéricos de telemetria com entrevistas de operadores); e quanto aos Objetivos como Explicativa (determina causas e efeitos de fenômenos).",
+            projectImpact: "Dá fundamentação científica ao projeto, garantindo validade aos resultados demonstrados."
+          },
+          {
+            tag: "Engenharia de Desempenho",
+            title: "Metodologia de Benchmarking Competitivo e Funcional",
+            icon: "scan",
+            detail: "Inspirada no modelo de 10 passos de Robert Camp: Planejar (identificar o que comparar), Analisar (determinar a lacuna de desempenho atual e projetar o gap futuro), Integrar (estabelecer metas funcionais) e Agir. Compara processos da empresa com líderes de mercado sob as mesmas condições regulatórias.",
+            projectImpact: "Evita 'reinventar a roda', aproveitando melhores práticas consagradas no mercado mundial."
+          },
+          {
+            tag: "Sistemas de Controle",
+            title: "Métricas de Esforço (Lead) vs. Métricas de Resultado (Lag)",
+            icon: "gauge",
+            detail: "Métricas Lag (Resultado) medem o passado (ex: Faturamento perdido por avaria no mês). Métricas Lead (Esforço) medem as variáveis de controle preditivas que impedem o problema de acontecer (ex: Tempo de pré-resfriamento do baú antes do carregamento). Um bom projeto logístico equilibra ambos os tipos.",
+            projectImpact: "Permite controle em tempo real antes que a falha chegue aos clientes ou cause perdas financeiras."
+          },
+          {
+            tag: "Parametrização",
+            title: "Anatomia da Ficha Técnica de Indicador (KPI Blueprint)",
+            icon: "file-code",
+            detail: "Nenhum KPI pode ser vago. A ficha exige: Nome normalizado, Objetivo estratégico, Fórmula matemática estrita, Unidade de medida, Polaridade (quanto maior melhor ou quanto menor melhor), Periodicidade de medição, Fonte do dado primário e Gatilho de ação corretiva.",
+            projectImpact: "Padroniza a coleta e elimina ambiguidades entre turnos operacionais e departamentos."
+          }
+        ],
+
+        capabilities: [
+          {
+            type: "Técnica",
+            name: "Avaliar benchmarking e indicadores de desempenho",
+            application: "Comparar dados históricos da empresa com benchmarks internacionais (GDP/ANVISA), calculando as lacunas de produtividade."
+          },
+          {
+            type: "Técnica",
+            name: "Reconhecer diferentes tipos e métodos de pesquisa",
+            application: "Elaborar a matriz metodológica identificando tipologia da pesquisa, instrumentos de coleta e fontes primárias/secundárias."
+          },
+          {
+            type: "Socioemocional",
+            name: "Ética e Responsabilidade na Coleta de Dados",
+            application: "Assegurar que referências de concorrentes e fontes normativas sejam citadas de maneira íntegra e sem distorção estatística."
+          },
+          {
+            type: "Socioemocional",
+            name: "Postura de Cooperação e Alinhamento Técnico",
+            application: "Distribuir papéis na busca de dados de benchmarking sem sobreposição ou omissão de tarefas entre os colegas."
+          }
+        ],
+
+        caseStudy: {
+          scenarioTitle: "Benchmarking Funcional: BioFrio vs. Líderes Globais em Cold Chain",
+          description: "A consultoria comparou a performance operacional da BioFrio PharmaLog com padrões de excelência de operadores farmacêuticos classe mundial (DHL Life Sciences e Luft Healthcare):",
+          tableHeaders: ["Indicador Chave (KPI)", "Fórmula Paramétrica", "Métrica BioFrio", "Benchmark de Referência", "Gap de Eficiência"],
+          tableRows: [
+            ["Taxa de Excursão Térmica (TET)", "(Cargas com T fora da faixa / Total de Cargas) * 100", "5.8%", "< 0.3%", "+ 5.5% (Crítico)"],
+            ["Dwell Time de Doca Refrigerada", "Hora de Liberação do Veículo - Hora de Chegada", "68 min", "24 min", "+ 44 min (Gargalo)"],
+            ["OTIF (On-Time In-Full) Hospitalar", "(Pedidos no Prazo e Sem Avarias / Total Pedidos) * 100", "86.2%", "98.9%", "- 12.7% (Risco de Multa)"],
+            ["Acuracidade de Sensores de Doca", "(Sensores com Calibração RBC Válida / Total) * 100", "72.0%", "100.0%", "- 28.0% (Risco Sanitário)"]
+          ],
+          analyticalInsight: "Diagnóstico Comparativo: O Dwell Time de Doca é quase o triplo da média de excelência. Isso explica a saturação térmica do gelox antes do caminhão iniciar a rota. O benchmarking comprova que o objetivo central deve ser a redução do tempo de doca para menos de 25 minutos."
+        },
+
+        interactiveToolId: "kpi-builder",
+        interactiveToolTitle: "Gerador e Parametrizador de Fichas Técnicas de KPIs",
+        interactiveToolDesc: "Monte uma ficha técnica completa de indicador preenchendo os parâmetros abaixo para gerar o blueprint oficial do projeto:",
+
+        labMission: {
+          title: "Missão no Laboratório Presencial SENAI (Caso LogMais Sul)",
+          steps: [
+            "Transposição Prática: Pesquisar referências de mercado para Centros de Distribuição de alimentos secos e frios similares à LogMais Sul (ex: tempo médio de separação de pedidos, acuracidade de inventário e índice de avarias).",
+            "Matriz de Pesquisa: Estruturar no modelo da aula a matriz com problema, fontes consultadas, tipo de pesquisa e síntese de informações obtidas.",
+            "Ficha de Indicadores: Entregar a ficha técnica de pelo menos 2 indicadores vitais para acompanhar o processo com desvio de desempenho."
+          ],
+          docentQuestions: [
+            "Qual fonte de pesquisa foi consultada e como podemos comprovar sua confiabilidade técnica?",
+            "O indicador escolhido mede o esforço preventivo do processo ou apenas o resultado após a falha consumada?",
+            "Como o benchmarking permitiu definir uma meta desafiadora porém realista para a empresa?"
+          ]
+        }
+      },
+
+      {
+        id: 3,
+        tabName: "3. Causalidade (6M) & Alternativas",
+        heroBadge: "AULA 3 • ENCONTRO SÍNCRONO 3",
+        title: "Diagnóstico de Causalidade (6M & 5 Porquês) & Matriz de Alternativas",
+        subtitle: "Aprenda a aplicar a Análise de Causa Raiz (RCA) com o Diagrama de Ishikawa 6M, desdobrar os 5 Porquês e construir 3 alternativas de intervenção tecnicamente justificadas.",
+
+        deepConcepts: [
+          {
+            tag: "Engenharia da Qualidade",
+            title: "Análise de Causa Raiz (RCA) e Diagrama de Ishikawa 6M",
+            icon: "git-commit",
+            detail: "O diagrama de causa e efeito categoriza hipóteses em 6 dimensões operacionais: Método (processos e POPs), Máquina (equipamentos e calibração), Medida (métricas e instrumentos), Meio Ambiente (temperatura e layout), Mão de Obra (habilidades e treinamentos) e Material (embalagens e insumos). Impede simplificações superficiais.",
+            projectImpact: "Elimina a cultura punitiva ao demonstrar que a grande maioria das falhas decorre de método e ferramentas defeituosas."
+          },
+          {
+            tag: "Investigação Profunda",
+            title: "Método dos 5 Porquês com Verificação Cruzada",
+            icon: "help-circle",
+            detail: "Técnica iterativa de questionamento sistemático para perfurar os sintomas aparentes até atingir a lacuna gerencial primária. Regra de ouro da engenharia: a resposta do quinto porquê deve apontar sempre para um processo falho ou inexistente que pode ser modificado por um projeto.",
+            projectImpact: "Garante que a intervenção atue na fonte geradora, impedindo a reincidência crônica do problema."
+          },
+          {
+            tag: "Geração de Soluções",
+            title: "Triangulação de Alternativas Tecnológicas",
+            icon: "layers",
+            detail: "Um projeto de engenharia nunca parte de uma solução pré-concebida. A equipe deve desenvolver e sustentar tecnicamente no mínimo três caminhos alternativos de complexidades distintas (ex: Baixa automação vs. Reengenharia de Processo vs. Alta Tecnologia/IoT) para permitir análise comparativa de mérito.",
+            projectImpact: "Fornece à diretoria poder de escolha embasado em trade-offs de custo, prazo e eficiência."
+          },
+          {
+            tag: "Teoria de Sistemas",
+            title: "Teoria das Restrições (TOC) Aplicada à Logística",
+            icon: "link-2",
+            detail: "Concebida por Goldratt: a capacidade global de qualquer sistema logístico é ditada pelo seu gargalo operacional mais estreito. Investir em melhorias fora do gargalo representa desperdício de capital; a solução deve atuar diretamente sobre o elo restritivo da cadeia.",
+            projectImpact: "Maximiza o retorno sobre o investimento concentrando esforços na etapa restritiva do fluxo."
+          }
+        ],
+
+        capabilities: [
+          {
+            type: "Técnica",
+            name: "Selecionar ferramentas da qualidade mais coerentes",
+            application: "Aplicar o Ishikawa e os 5 Porquês conectando cada causa provável a evidências fáticas auditáveis levantadas na operação."
+          },
+          {
+            type: "Técnica",
+            name: "Propor e descrever alternativas de solução técnica",
+            application: "Estruturar 3 alternativas distintas contendo descrição funcional, requisitos operacionais, vantagens competitivas e implicações/riscos."
+          },
+          {
+            type: "Socioemocional",
+            name: "Análise Crítica e Imparcialidade de Ideias",
+            application: "Debater os pontos fracos de cada alternativa proposta sem apego emocional à própria ideia, buscando a melhor resposta para o negócio."
+          },
+          {
+            type: "Socioemocional",
+            name: "Integração dos Princípios da Qualidade",
+            application: "Garantir que as soluções desenhadas eliminem a causa raiz sem deslocar o gargalo para a área de distribuição ou faturamento."
+          }
+        ],
+
+        caseStudy: {
+          scenarioTitle: "Desdobramento Causal: 3 Alternativas de Engenharia para a BioFrio",
+          description: "Após consolidar o Ishikawa e aplicar os 5 Porquês na etapa de expedição refrigerada, a consultoria formulou a seguinte Matriz Comparativa de 3 Alternativas Técnicas:",
+          tableHeaders: ["Alternativa Proposta", "Arquitetura Técnica", "Vantagens Operacionais", "Implicações / Desafios"],
+          tableRows: [
+            [
+              "Opção A: Telemetria IoT LoRaWAN + Eclusa Rápida",
+              "Sensores sem fio de temperatura/umidade a cada pallet, gateway industrial LoRaWAN e portas seccionais automáticas de alta velocidade com vedação pneumática.",
+              "Monitoramento em tempo real (leituras a cada 30s), alertas automáticos no WMS, retenção térmica de 98% na doca e conformidade total ANVISA RDC 430.",
+              "CAPEX elevado inicial, necessidade de validação técnica do software de telemetria perante a auditoria de qualidade hospitalar."
+            ],
+            [
+              "Opção B: Reengenharia de Layout e Staging em Câmara Fria",
+              "Transferência física da montagem dos pedidos para o interior de câmara climatizada a 4°C, eliminando qualquer permanência de carga na área de galpão comum.",
+              "Elimina o risco de choque térmico sem depender de sensores complexos de radiofrequência; processo puramente físico e mecânico.",
+              "Demanda reforma predial na câmara fria, necessidade de vestimentas térmicas EPI para 100% dos separadores e redução da área útil de estoque."
+            ],
+            [
+              "Opção C: Substituição de Insumos por Placas Eutéticas PCM",
+              "Substituição de bolsas de gelo à base de água por placas de material de mudança de fase (PCM) com curva de congelamento estável a -18°C e caixas VIP de alto isolamento.",
+              "Implementação rápida em 15 dias sem obras civis nem instalações de TI complexas; alta autonomia térmica de até 48 horas.",
+              "Custo unitário contínuo (OPEX) elevado de compra das placas PCM, risco de perda/extravio das placas nos clientes e necessidade de freezeres potentes para congelamento."
+            ]
+          ],
+          analyticalInsight: "Visão Geral: As 3 alternativas são tecnicamente válidas, porém possuem perfis operacionais completamente distintos: a Opção A foca em automação e dados, a Opção B em infraestrutura física e a Opção C em materiais passivos."
+        },
+
+        interactiveToolId: "five-whys-tree",
+        interactiveToolTitle: "Árvore Interativa de Causa Raiz (5 Porquês na Prática)",
+        interactiveToolDesc: "Clique nos níveis da árvore causal abaixo para desvendar cada camada investigativa do gargalo na doca da BioFrio:",
+
+        labMission: {
+          title: "Missão no Laboratório Presencial SENAI (Caso LogMais Sul)",
+          steps: [
+            "Transposição Prática: Construir o Diagrama de Ishikawa para o problema priorizado no laboratório (ex: divergência na montagem de pedidos ou atraso no carregamento de frotas).",
+            "Painel de Causas: Selecionar no mínimo 2 causas mais prováveis e aplicar o desdobramento dos 5 Porquês para atingir a causa raiz processual.",
+            "Matriz de Alternativas: Descrever no mínimo 3 alternativas de intervenção com vantagens e implicações registradas para análise comparativa posterior."
+          ],
+          docentQuestions: [
+            "Esta causa identificada tem evidências nos dados ou baseia-se apenas em impressões subjetivas?",
+            "Se eliminarmos esta causa, o problema cessa ou ele continuará ocorrendo por outros fatores?",
+            "As 3 alternativas propostas são realmente diferentes ou são apenas variações da mesma ideia?"
+          ]
+        }
+      },
+
+      {
+        id: 4,
+        tabName: "4. Orçamento, Payback & 5W2H",
+        heroBadge: "AULA 4 • ENCONTRO SÍNCRONO 4",
+        title: "Engenharia Econômica, Análise Multicritério, Orçamento & Matriz 5W2H",
+        subtitle: "Aprenda a aplicar a Matriz de Decisão Multicritério, orçar CAPEX vs. OPEX, calcular o Payback Simples e Descontado, e detalhar a execução pelo Plano de Ação 5W2H.",
+
+        deepConcepts: [
+          {
+            tag: "Engenharia de Decisão",
+            title: "Matriz Multicritério Ponderada (Pugh Decision Matrix)",
+            icon: "sliders",
+            detail: "Ferramenta matemática para seleção da alternativa ideal. Define-se critérios estratégicos (ex: Eficácia Técnica, Custo de Implantação, Tempo de Retorno, Facilidade Operacional, Risco Regulatório), atribui-se pesos percentuais (somando 100%) e pontua-se cada solução de 1 a 10 de forma justificada.",
+            projectImpact: "Remove o viés subjetivo da escolha e oferece embasamento matemático inatacável perante a diretoria."
+          },
+          {
+            tag: "Engenharia Financeira",
+            title: "Estrutura Orçamentária: CAPEX vs. OPEX",
+            icon: "calculator",
+            detail: "Projetos logísticos separam rigorosamente CAPEX (Capital Expenditure: bens de capital, ativos fixos depreciáveis, equipamentos e reformas) de OPEX (Operational Expenditure: custos recorrentes de manutenção, licenças em nuvem, insumos descartáveis e mão de obra).",
+            projectImpact: "Permite avaliar o impacto contábil, tributário e a necessidade de capital de giro da operação."
+          },
+          {
+            tag: "Análise de Investimentos",
+            title: "Tempo de Amortização (Payback) e Retorno sobre Investimento (ROI)",
+            icon: "trending-up",
+            detail: "O Payback Simples determina em quantos meses o fluxo de caixa líquido acumulado (economias de custos de perdas menos os novos custos operacionais) se iguala ao montante do CAPEX inicial. O ROI expressa percentualmente a rentabilidade líquida do projeto sobre o capital alocado.",
+            projectImpact: "Responde à pergunta mais importante dos diretores e investidores: 'Em quanto tempo recupero o dinheiro investido?'"
+          },
+          {
+            tag: "Desdobramento Operacional",
+            title: "Plano de Ação Tático 5W2H Integrado a Cronogramas",
+            icon: "calendar-check",
+            detail: "Framework de detalhamento à prova de falhas: What (O que será feito com escopo claro), Why (Por que / Justificativa), Where (Onde / Local físico ou sistema), When (Quando / Cronograma com marcos), Who (Quem / Dono único da ação), How (Como / Procedimento técnico) e How Much (Quanto custará com base no orçamento).",
+            projectImpact: "Transforma a ideia abstrata em um plano de engenharia executável sem dependências soltas."
+          }
+        ],
+
+        capabilities: [
+          {
+            type: "Técnica",
+            name: "Avaliar alternativas por critérios técnicos e financeiros",
+            application: "Estruturar a matriz multicritério ponderada para eleger com transparência a melhor solução técnica."
+          },
+          {
+            type: "Técnica",
+            name: "Orçar custos e calcular amortização de investimentos",
+            application: "Elaborar planilha orçamentária discriminando CAPEX/OPEX e demonstrar o cálculo analítico do tempo de payback."
+          },
+          {
+            type: "Socioemocional",
+            name: "Iniciativa e Realismo Orçamentário",
+            application: "Cotar valores reais condizentes com os preços de mercado de suprimentos e tecnologia industrial."
+          },
+          {
+            type: "Socioemocional",
+            name: "Clareza na Apresentação de Dados Quantitativos",
+            application: "Organizar fluxos de caixa e cronogramas de modo que gestores financeiros compreendam instantaneamente as premissas."
+          }
+        ],
+
+        caseStudy: {
+          scenarioTitle: "Demonstrativo Econômico & 5W2H: Projeto IoT BioFrio PharmaLog",
+          description: "Após a Matriz Multicritério eleger a Opção A (IoT LoRaWAN + Eclusa Rápida) com nota ponderada 8.85 contra 7.20 da Opção B e 6.40 da Opção C, a equipe estruturou o plano financeiro e o 5W2H:",
+          tableHeaders: ["Item Orçamentário", "Classificação", "Valor Unitário (R$)", "Quantidade", "Subtotal (R$)"],
+          tableRows: [
+            ["Gateway LoRaWAN Industrial + Antenas de Alto Alcance", "CAPEX", "R$ 7.250,00", "2 unidades", "R$ 14.500,00"],
+            ["Sensores IoT com Certificado de Calibração RBC (2°C a 8°C)", "CAPEX", "R$ 500,00", "45 unidades", "R$ 22.500,00"],
+            ["Porta Seccional Isotérmica com Abertura Automática por Radar", "CAPEX", "R$ 38.000,00", "1 conjunto", "R$ 38.000,00"],
+            ["Integração de Software via Webhooks com WMS Corporativo", "CAPEX", "R$ 12.000,00", "1 pacote", "R$ 12.000,00"],
+            ["Licença SaaS Plataforma Cloud de Telemetria e Alertas SMS", "OPEX (Mensal)", "R$ 1.800,00", "Recorrente", "R$ 1.800,00/mês"]
+          ],
+          analyticalInsight: "Cálculo de Retorno do Caso BioFrio: Investimento Inicial (CAPEX) = R$ 87.000,00. Economia Mensal Evitada com Perda de Cargas = R$ 14.500,00. OPEX Adicional = R$ 1.800,00/mês. Ganho Líquido Mensal = R$ 12.700,00. Payback = 87.000 / 12.700 = 6,85 meses (Aproximadamente 7 meses). No primeiro ano, a economia líquida supera R$ 65.000,00 livres."
+        },
+
+        interactiveToolId: "payback-calculator",
+        interactiveToolTitle: "Calculadora Interativa de Payback e Viabilidade Econômica",
+        interactiveToolDesc: "Altere os valores de investimento inicial e economias operacionais para ver em tempo real o tempo de amortização do capital:",
+
+        labMission: {
+          title: "Missão no Laboratório Presencial SENAI (Caso LogMais Sul)",
+          steps: [
+            "Transposição Prática: Construir a Matriz Comparativa Ponderada para as 3 alternativas da LogMais Sul estabelecendo pesos e notas.",
+            "Planilha Orçamentária: Estimar os custos de implantação da alternativa escolhida (aquisição de coletores de dados, prateleiras dinâmicas, softwares ou reformas).",
+            "Cronograma e 5W2H: Estruturar o plano de ação completo com responsáveis, prazos em semanas e marcos de entrega."
+          ],
+          docentQuestions: [
+            "Qual o critério que recebeu maior peso na matriz e por que ele é decisivo para a sobrevivência da empresa?",
+            "O orçamento incluiu custos ocultos como treinamento da equipe e paradas temporárias de operação?",
+            "Em quanto tempo a economia gerada pela solução cobrirá o investimento realizado?"
+          ]
+        }
+      },
+
+      {
+        id: 5,
+        tabName: "5. Rigor ABNT & Relatório",
+        heroBadge: "AULA 5 • ENCONTRO SÍNCRONO 5",
+        title: "Redação Técnica, Rigor Metodológico & Normas ABNT Aplicadas",
+        subtitle: "Aprenda a estruturar o Relatório Técnico-Científico nos padrões canônicos da ABNT (NBR 10719, 14724, 10520 e 6023) sem cometer erros de formatação ou plágio.",
+
+        deepConcepts: [
+          {
+            tag: "Comunicação Científica",
+            title: "Arquitetura Canônica do Relatório Técnico (NBR 10719 & 14724)",
+            icon: "book-open",
+            detail: "Um projeto profissional requer estrutura tripartite padronizada: Elementos Pré-Textuais (Capa, Folha de Rosto, Resumo na língua vernácula, Listas automatizadas de Figuras e Tabelas, Sumário hierárquico); Elementos Textuais (Introdução com Problema/Justificativa, Metodologia, Diagnóstico, Desenvolvimento da Solução, Viabilidade Financeira e Conclusão); e Elementos Pós-Textuais (Referências conforme NBR 6023, Apêndices e Anexos).",
+            projectImpact: "Assegura credibilidade profissional imediata perante comitês avaliadores e auditorias de clientes."
+          },
+          {
+            tag: "Autoria e Ética",
+            title: "Sistemas de Citação e Integridade Científica (NBR 10520)",
+            icon: "quote",
+            detail: "Dominar os três modos de citação: 1) Citação Indireta (paráfrase do conceito: segundo Ballou (2006), o lead time...); 2) Citação Direta Curta (até 3 linhas: reprodução idêntica com aspas duplas no corpo do texto e indicação de página); e 3) Citação Direta Longa (mais de 3 linhas: recuo de 4 cm da margem esquerda, fonte tamanho 10, espaçamento simples e sem aspas).",
+            projectImpact: "Protege o projeto contra acusações de plágio e ancora as propostas em autoridades consagradas."
+          },
+          {
+            tag: "Normalização Gráfica",
+            title: "Regras de Apresentação de Quadros e Tabelas (Normas IBGE/ABNT)",
+            icon: "table",
+            detail: "Distinção técnica vital: Quadros apresentam dados predominantemente textuais e possuem bordas laterais fechadas; Tabelas apresentam dados primordialmente numéricos e, segundo o IBGE, NUNCA possuem bordas laterais fechadas à esquerda e à direita. Ambos exigem identificação no topo e fonte no rodapé.",
+            projectImpact: "Evita reprovação documental por inconsistências de formatação visual em bancas avaliadoras."
+          },
+          {
+            tag: "Padronização de Layout",
+            title: "Parâmetros Físicos de Diagramação ABNT",
+            icon: "layout",
+            detail: "Papel formato A4; Margens: Superior e Esquerda de 3 cm, Inferior e Direita de 2 cm; Tipografia padronizada em Arial ou Times New Roman tamanho 12 para texto regular; Espaçamento entrelinhas de 1,5 cm; e paginação no canto superior direito a partir da Introdução.",
+            projectImpact: "Garante legibilidade universal e padronização editorial com os manuais de TCC/Projetos do SENAI."
+          }
+        ],
+
+        capabilities: [
+          {
+            type: "Técnica",
+            name: "Elaborar e formatar projeto de acordo com as normas da ABNT",
+            application: "Aplicar regras de margens, tipografia, sumário estruturado, citações e referências no editor de texto."
+          },
+          {
+            type: "Técnica",
+            name: "Reconhecer coerência entre metodologia e resultados",
+            application: "Garantir que a metodologia descrita no texto espelhe com fidelidade as ferramentas aplicadas nos capítulos anteriores."
+          },
+          {
+            type: "Socioemocional",
+            name: "Organização e Rigor Documental",
+            application: "Revisar minuciosamente concordância, termos técnicos e padronização de legendas de figuras e tabelas."
+          },
+          {
+            type: "Socioemocional",
+            name: "Uso Ético das Informações",
+            application: "Identificar corretamente a autoria de todas as fontes de pesquisa consultadas (ANVISA, artigos, livros)."
+          }
+        ],
+
+        caseStudy: {
+          scenarioTitle: "Corpus Textual Padronizado ABNT: Dossiê BioFrio PharmaLog",
+          description: "Observe como a equipe redigiu a seção de Justificativa e Metodologia cumprindo todas as exigências normativas da ABNT:",
+          sampleABNTSection: {
+            tituloSecao: "1.2 JUSTIFICATIVA TÉCNICA E METODOLÓGICA",
+            paragrafo1: "A garantia da integridade termolábil nas cadeias de suprimentos farmacêuticas não constitui mero diferencial competitivo, configurando preceito sanitário compulsório nos termos da Resolução RDC nº 430 da Agência Nacional de Vigilância Sanitária (BRASIL, 2020), que determina a comprovação contínua das faixas térmicas em todas as etapas da cadeia de custódia.",
+            paragrafo2: "Nesse sentido, a ocorrência de excursões de temperatura acarreta a desnaturação biológica dos fármacos e a consequente inutilização do lote. Como adverte Ballou (2006, p. 138), \"o custo de falha no atendimento logístico especializado transcende o valor venal da mercadoria, comprometendo a credibilidade perante a sociedade e incorrendo em passivos legais de proporções severas\".",
+            paragrafo3: "Metodologicamente, a presente pesquisa classifica-se como aplicada e explicativa, desenvolvida mediante estudo de caso em centro de distribuição refrigerado. Para a estratificação de perdas, adotou-se o princípio de Pareto, identificando-se que 78,2% dos desvios concentram-se nas fases de doca e embalagem secundária. Com base nesses dados, estruturou-se a matriz 5W2H e a avaliação de investimento em tecnologia IoT (Internet das Coisas)."
+          },
+          analyticalInsight: "Rigor Identificado no Texto: Citação indireta de norma governamental (BRASIL, 2020), citação direta curta com autor, ano e página entre aspas duplas, e coerência metódica entre o problema e a solução proposta."
+        },
+
+        interactiveToolId: "abnt-formatter",
+        interactiveToolTitle: "Validador e Gerador de Citações e Referências ABNT (NBR 10520 & 6023)",
+        interactiveToolDesc: "Selecione o tipo de fonte bibliográfica consultada para ver a sintaxe exata da citação no corpo do texto e a respectiva referência final:",
+
+        labMission: {
+          title: "Missão no Laboratório Presencial SENAI (Caso LogMais Sul)",
+          steps: [
+            "Transposição Prática: Abrir o Modelo de Projeto de Pesquisa LogMais Sul no computador do laboratório e aplicar a formatação ABNT rigorosa.",
+            "Consolidação de Capítulos: Integrar o Diagnóstico (Aula 1), Benchmarking (Aula 2), Ishikawa (Aula 3) e Plano 5W2H (Aula 4) em um único documento encadeado.",
+            "Checklist de Revisão: Validar margens, numeração progressiva das seções, listas de tabelas e lista de referências antes do envio da versão preliminar."
+          ],
+          docentQuestions: [
+            "O sumário foi gerado de forma automatizada respeitando a numeração progressiva das seções?",
+            "As tabelas e figuras possuem indicação de título na parte superior e a fonte de dados na parte inferior?",
+            "Todas as obras citadas ao longo do texto constam na lista final de referências em ordem alfabética?"
+          ]
+        }
+      },
+
+      {
+        id: 6,
+        tabName: "6. Pitch, Banca & Validação",
+        heroBadge: "AULA 6 • ENCONTRO SÍNCRONO 6",
+        title: "Consolidação, Gestão de Riscos, Pitch Executivo & Defesa na Banca",
+        subtitle: "Aprenda a estruturar o Pitch Técnico em 10 minutos, mapear riscos operacionais pela matriz FMEA e responder com segurança técnica e postura ética perante a Banca Examinadora.",
+
+        deepConcepts: [
+          {
+            tag: "Comunicação Executiva",
+            title: "Estrutura Narrativa do Pitch Logístico (Storytelling de Negócios)",
+            icon: "mic",
+            detail: "Apresentação de alta densidade em 10 minutos dividida em 4 arcos narrativos: 1) O Desafio Operacional e Impacto Financeiro (2 min); 2) O Diagnóstico Causal Científico com Pareto/Ishikawa (2 min); 3) A Solução de Engenharia e Plano 5W2H (3 min); e 4) A Viabilidade Econômica (Payback) e Gestão de Riscos (3 min).",
+            projectImpact: "Conquista a aprovação da banca e de patrocinadores sem sobrecarregar a audiência com detalhes secundários."
+          },
+          {
+            tag: "Engenharia de Riscos",
+            title: "Matriz de Riscos de Implantação e Análise FMEA",
+            icon: "shield-alert",
+            detail: "Todo projeto inovador introduz riscos operacionais. A matriz Probabilidade vs. Impacto e a metodologia FMEA (Failure Mode and Effect Analysis) identificam previamente o que pode dar errado durante a execução (ex: instabilidade no sinal dos sensores, atraso na entrega de obras civis) e estabelecem planos de contingência preventivos.",
+            projectImpact: "Demonstra maturidade profissional ao provar que a equipe previu cenários de crise e já possui planos B e C."
+          },
+          {
+            tag: "Postura Profissional",
+            title: "Técnicas de Defesa e Resposta sob Pressão (Arguição)",
+            icon: "award",
+            detail: "Princípios de inteligência socioemocional em bancas técnicas: ouvir atentamente sem interromper o avaliador, não entrar em discussões defensivas, ancorar as respostas em dados documentados no relatório escrito e demonstrar sinergia articulada entre todos os membros da equipe.",
+            projectImpact: "Evidencia o desenvolvimento pleno das capacidades socioemocionais exigidas pelo mercado e pelo SENAI."
+          },
+          {
+            tag: "Validação com o Mercado",
+            title: "Banca Examinadora com Indústrias Parceiras",
+            icon: "briefcase",
+            detail: "Momento ápice do curso técnico. A presença de gestores de operações e especialistas industriais valida se o projeto de logística é viável e aplicável no chão de fábrica ou centro de distribuição real no dia seguinte.",
+            projectImpact: "Aproxima o aluno das demandas reais de contratação e fortalece o networking profissional."
+          }
+        ],
+
+        capabilities: [
+          {
+            type: "Técnica",
+            name: "Organizar e transmitir com clareza dados técnicos",
+            application: "Sintetizar gráficos de Ishikawa, tabelas orçamentárias e fluxogramas em slides limpos, objetivos e profissionais."
+          },
+          {
+            type: "Técnica",
+            name: "Justificar tecnicamente decisões tomadas",
+            application: "Fundamentar perante a banca o motivo de escolha dos sensores IoT frente a outras alternativas operacionais."
+          },
+          {
+            type: "Socioemocional",
+            name: "Postura de Cooperação e Articulação na Fala",
+            application: "Distribuir as falas harmonicamente entre os integrantes, sem que um único aluno monopolize ou se omita na arguição."
+          },
+          {
+            type: "Socioemocional",
+            name: "Atitude Ética e Resiliência perante Feedbacks",
+            application: "Acolher as críticas e apontamentos dos avaliadores com maturidade técnica, registrando os ajustes para a versão final."
+          }
+        ],
+
+        caseStudy: {
+          scenarioTitle: "Simulação de Defesa Técnica: BioFrio perante a Banca Examinadora",
+          description: "Veja como a equipe da BioFrio respondeu aos questionamentos mais desafiadores feitos pelo Gerente de Operações e pelo Auditor de Qualidade Hospitalar durante a banca simulada:",
+          argutionList: [
+            {
+              interrogador: "Avaliador Industrial: 'Vocês estão investindo R$ 87.000,00 em sensores e eclusa rápida. Não seria muito mais barato simplesmente aumentar o número de caixas de gelox na embalagem?'",
+              respostaTecnica: "Resposta Fundamentada da Equipe: 'Testamos essa hipótese no levantamento causal da Aula 3. O aumento de placas de gelox adiciona 1,8 kg de peso morto por volume expedido, o que elevaria o custo de frete aéreo e rodoviário em R$ 42.000,00 ao ano sem resolver a causa raiz, que é o tempo de exposição na doca a 28°C. A nossa solução tecnológica ataca o gargalo e possui Payback amortizado em menos de 7 meses, gerando economia líquida de R$ 65.000,00 já no primeiro ano.'"
+            },
+            {
+              interrogador: "Avaliador da Qualidade: 'E se a bateria dos sensores LoRaWAN descarregar no meio do transporte interestadual, qual a garantia regulatória perante a ANVISA?'",
+              respostaTecnica: "Resposta Fundamentada da Equipe: 'Consta no nosso Plano 5W2H e na matriz FMEA (Aula 4): os sensores operam em modo sleep de ultra-baixo consumo com autonomia atestada de 3 anos de bateria. Além disso, cada sensor possui memória onboard com buffer para registrar 30 dias de telemetria offline ininterrupta, descarregando o relatório criptografado assim que o veículo acessa a doca de destino.'"
+            }
+          ],
+          analyticalInsight: "Padrão Ouro de Arguição: A resposta não apela para 'nós achamos que dá certo', mas ancora-se estritamente em cálculos econômicos, testes de hipóteses anteriores e matriz de riscos documentada."
+        },
+
+        interactiveToolId: "board-simulator",
+        interactiveToolTitle: "Simulador de Arguição da Banca e Rubrica Avaliativa do SENAI",
+        interactiveToolDesc: "Teste como a banca avaliadora pontua a apresentação da sua equipe marcando os critérios de excelência técnica e socioemocional:",
+
+        labMission: {
+          title: "Missão no Laboratório Presencial SENAI (Caso LogMais Sul)",
+          steps: [
+            "Transposição Prática: Montar a apresentação executiva da LogMais Sul em no máximo 10 slides claros e objetivos.",
+            "Defesa Técnica: Realizar a apresentação oral perante o docente e convidados das indústrias da região com tempo cronometrado (10 a 12 minutos).",
+            "Entrega Final: Coletar os feedbacks da banca examinadora, registrar as correções acordadas e entregar o projeto logístico final encadernado/formatado."
+          ],
+          docentQuestions: [
+            "O projeto responde diretamente à situação-problema delimitada no primeiro encontro?",
+            "As evidências apresentadas sustentam plenamente a solução técnica escolhida?",
+            "Todos os integrantes do grupo demonstraram domínio conceitual nas respostas da arguição?"
+          ]
+        }
+      }
+    ];
+
+    // STATE CONTROLLER
+    let activeLessonId = 1;
+    let currentViewMode = 'student'; // 'student' or 'teacher'
+    let currentCapabilityFilter = 'all'; // 'all', 'Técnica', 'Socioemocional'
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      renderNavTabs();
+      renderActiveLesson();
+      loadNotesFromLocalStorage();
+      lucide.createIcons();
+    });
+
+    // RENDER NAVIGATION TABS
+    function renderNavTabs() {
+      const nav = document.getElementById('navTabs');
+      nav.innerHTML = lessonsData.map(l => {
+        const isActive = l.id === activeLessonId;
+        return `
+          <button onclick="switchLesson(${l.id})" class="px-3.5 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all flex items-center gap-2 ${
+            isActive 
+              ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold shadow-lg shadow-cyan-950/60 ring-1 ring-cyan-400/40' 
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 border border-transparent'
+          }">
+            <span class="w-2 h-2 rounded-full ${isActive ? 'bg-white animate-pulse' : 'bg-slate-600'}"></span>
+            ${l.tabName}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // SWITCH LESSON
+    function switchLesson(id) {
+      activeLessonId = id;
+      renderNavTabs();
+      renderActiveLesson();
+      document.getElementById('notesLessonSelector').value = id;
+      loadCurrentLessonNote();
+      lucide.createIcons();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // TOGGLE VIEW MODE (STUDENT VS DOCENT)
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const btnStudent = document.getElementById('viewBtnStudent');
+      const btnTeacher = document.getElementById('viewBtnTeacher');
+      const banner = document.getElementById('docentModeBanner');
+
+      if (mode === 'teacher') {
+        btnTeacher.className = "px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-amber-600 text-white font-medium shadow-sm";
+        btnStudent.className = "px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white";
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+      } else {
+        btnStudent.className = "px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-cyan-600 text-white font-medium shadow-sm";
+        btnTeacher.className = "px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white";
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+      }
+      renderActiveLesson();
+      lucide.createIcons();
+    }
+
+    // FILTER CAPABILITIES
+    function setCapabilityFilter(filter) {
+      currentCapabilityFilter = filter;
+      renderActiveLesson();
+      lucide.createIcons();
+    }
+
+    // RENDER MAIN ACTIVE LESSON
+    function renderActiveLesson() {
+      const lesson = lessonsData.find(l => l.id === activeLessonId);
+      if (!lesson) return;
+
+      // Update Hero Content
+      document.getElementById('heroBadgeLesson').innerText = lesson.heroBadge;
+      document.getElementById('heroTitle').innerText = lesson.title;
+      document.getElementById('heroSubtitle').innerText = lesson.subtitle;
+
+      const container = document.getElementById('dynamicLessonContent');
+
+      // Assemble Sections
+      container.innerHTML = `
+        
+        <!-- TEACHER HIGHLIGHT BANNER (If in Teacher Mode) -->
+        ${currentViewMode === 'teacher' ? `
+          <div class="p-4 rounded-xl bg-amber-950/40 border border-amber-800/80 text-xs text-amber-200 space-y-2">
+            <div class="flex items-center gap-2 font-bold uppercase tracking-wider text-amber-300">
+              <i data-lucide="compass" class="w-4 h-4"></i> Roteiro de Mediação Pedagógica Síncrona (Docente SENAI)
+            </div>
+            <p><strong>Objetivo na aula ao vivo:</strong> Assegurar que os estudantes assimilem o método analítico com a BioFrio PharmaLog, preparando-os para atuar com autonomia no laboratório presencial com a LogMais Sul.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
+              <div class="p-2 rounded bg-slate-900/80 border border-amber-900/50">
+                <span class="text-amber-400 block font-bold">1. Abertura e Nivelamento:</span>
+                Revisar conceitos da aula e expor o erro clássico de confundir sintoma com causa.
+              </div>
+              <div class="p-2 rounded bg-slate-900/80 border border-amber-900/50">
+                <span class="text-amber-400 block font-bold">2. Mediação Ativa:</span>
+                Provocar os alunos a usarem os simuladores interativos com dados práticos.
+              </div>
+              <div class="p-2 rounded bg-slate-900/80 border border-amber-900/50">
+                <span class="text-amber-400 block font-bold">3. Fechamento e Encomenda:</span>
+                Alinhar o que cada equipe deverá trazer estruturado para o encontro presencial.
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- SECTION 1: CONCEITOS FUNDAMENTAIS DE PROJETOS -->
+        <section id="secao-conceitos-projeto" class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-brand-border/60 pb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="p-2 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800">
+                <i data-lucide="book-open-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-base sm:text-lg font-bold text-white tracking-tight">Conceitos Científicos de Engenharia e Gestão de Projetos</h3>
+                <p class="text-xs text-slate-400">Fundamentos técnicos indispensáveis para a elaboração de projetos logísticos profissionais.</p>
+              </div>
+            </div>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-800 text-cyan-300 border border-slate-700 self-start sm:self-auto">
+              Teoria Síncrona 80/20
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            ${lesson.deepConcepts.map(c => `
+              <div class="p-4 rounded-xl bg-brand-surface border border-brand-border/80 hover:border-cyan-500/60 transition-all flex flex-col justify-between group shadow-sm">
+                <div class="space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60">${c.tag}</span>
+                    <i data-lucide="${c.icon}" class="w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-colors"></i>
+                  </div>
+                  <h4 class="text-xs sm:text-sm font-bold text-white leading-snug">${c.title}</h4>
+                  <p class="text-xs text-slate-300 leading-relaxed">${c.detail}</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-cyan-300/90 font-mono flex items-start gap-1.5">
+                  <i data-lucide="zap" class="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5"></i>
+                  <span><strong>Impacto:</strong> ${c.projectImpact}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+
+        <!-- SECTION 2: MAPA DE CAPACIDADES DO PROJETO (SENAI) -->
+        <section class="p-5 rounded-2xl bg-brand-surface border border-brand-border space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-brand-border/60">
+            <div>
+              <div class="flex items-center gap-2">
+                <div class="p-1.5 rounded-lg bg-blue-950 text-blue-400 border border-blue-800">
+                  <i data-lucide="target" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-base sm:text-lg font-bold text-white">Mapa de Capacidades Desenvolvidas na Etapa</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">Manifestações práticas que comprovam o desenvolvimento das capacidades técnicas e socioemocionais do SENAI.</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="flex items-center gap-1.5 bg-brand-dark p-1 rounded-xl border border-brand-border text-xs">
+              <button onclick="setCapabilityFilter('all')" class="px-2.5 py-1 rounded-lg transition ${currentCapabilityFilter === 'all' ? 'bg-slate-700 text-white font-medium' : 'text-slate-400 hover:text-white'}">Todas</button>
+              <button onclick="setCapabilityFilter('Técnica')" class="px-2.5 py-1 rounded-lg transition ${currentCapabilityFilter === 'Técnica' ? 'bg-cyan-600 text-white font-medium' : 'text-slate-400 hover:text-white'}">Técnicas</button>
+              <button onclick="setCapabilityFilter('Socioemocional')" class="px-2.5 py-1 rounded-lg transition ${currentCapabilityFilter === 'Socioemocional' ? 'bg-amber-600 text-white font-medium' : 'text-slate-400 hover:text-white'}">Socioemocionais</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            ${lesson.capabilities
+              .filter(c => currentCapabilityFilter === 'all' || c.type === currentCapabilityFilter)
+              .map(cap => `
+                <div class="p-3.5 rounded-xl bg-brand-card/80 border ${cap.type === 'Técnica' ? 'border-cyan-900/50 hover:border-cyan-700/60' : 'border-amber-900/50 hover:border-amber-700/60'} transition flex flex-col justify-between">
+                  <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded ${
+                        cap.type === 'Técnica' ? 'bg-cyan-950 text-cyan-400 border border-cyan-800' : 'bg-amber-950 text-amber-400 border border-amber-800'
+                      }">${cap.type}</span>
+                      <i data-lucide="${cap.type === 'Técnica' ? 'cpu' : 'users'}" class="w-3.5 h-3.5 text-slate-500"></i>
+                    </div>
+                    <h4 class="text-xs sm:text-sm font-semibold text-white">${cap.name}</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">${cap.application}</p>
+                  </div>
+                </div>
+              `).join('')}
+          </div>
+        </section>
+
+        <!-- SECTION 3: ESTUDO DE CASO PARALELO (BIOFRIO PHARMALOG) -->
+        <section class="p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-brand-surface border border-brand-border space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-brand-border/60">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800">
+                <i data-lucide="snowflake" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <span class="text-[10px] font-mono text-cyan-400 uppercase font-bold tracking-wider">Cenário Didático Paralelo Síncrono</span>
+                <h3 class="text-base sm:text-lg font-bold text-white">${lesson.caseStudy.scenarioTitle}</h3>
+              </div>
+            </div>
+            <span class="text-xs text-slate-400 font-mono">Operação Farmacêutica Refrigerada</span>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${lesson.caseStudy.description}</p>
+
+          <!-- Dynamic Presentation per Lesson -->
+          ${renderCaseStudyTable(lesson)}
+
+          <div class="p-3.5 rounded-xl bg-cyan-950/40 border border-cyan-800/80 text-xs text-cyan-200 flex items-start gap-3">
+            <i data-lucide="check-check" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold uppercase tracking-wider block text-[11px] text-cyan-400">Análise Crítica de Engenharia:</span>
+              ${lesson.caseStudy.analyticalInsight}
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: SIMULADOR INTERATIVO / FERRAMENTA ROBUSTA -->
+        <section id="secao-ferramenta-interativa" class="p-5 sm:p-6 rounded-2xl bg-brand-surface border border-cyan-900/60 shadow-xl space-y-4">
+          <div class="flex items-center gap-2.5 pb-2 border-b border-brand-border">
+            <div class="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800">
+              <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-white">${lesson.interactiveToolTitle}</h3>
+              <p class="text-xs text-slate-400">${lesson.interactiveToolDesc}</p>
+            </div>
+          </div>
+
+          <div id="interactiveToolContainer" class="pt-2">
+            ${renderInteractiveTool(lesson)}
+          </div>
+        </section>
+
+        <!-- SECTION 5: PONTE PARA O LABORATÓRIO PRESENCIAL SENAI (LOGMAIS SUL) -->
+        <section id="secao-ponte-laboratorio" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 border border-emerald-800/60 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-emerald-900/50">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-emerald-900/60 text-emerald-300 border border-emerald-700">
+                <i data-lucide="door-open" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <span class="text-[10px] font-mono text-emerald-400 uppercase font-bold tracking-wider">Ponte Pedagógica EaD 80/20</span>
+                <h3 class="text-base sm:text-lg font-bold text-white">${lesson.labMission.title}</h3>
+              </div>
+            </div>
+            <span class="text-xs text-emerald-400 font-mono px-2.5 py-1 rounded bg-emerald-950 border border-emerald-800">
+              Prática Presencial no Polo
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <!-- Left: Roteiro de Ação Prática dos Alunos -->
+            <div class="space-y-3 bg-slate-900/80 p-4 rounded-xl border border-brand-border">
+              <span class="text-xs font-mono font-bold text-emerald-400 uppercase block flex items-center gap-1.5">
+                <i data-lucide="list-checks" class="w-4 h-4"></i> Roteiro de Ação dos Alunos no Laboratório:
+              </span>
+              <ul class="space-y-2 text-slate-300">
+                ${lesson.labMission.steps.map((st, i) => `
+                  <li class="flex items-start gap-2">
+                    <span class="w-4 h-4 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center justify-center font-mono text-[10px] shrink-0 mt-0.5">${i + 1}</span>
+                    <span>${st}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+
+            <!-- Right: Perguntas Mediadoras do Docente -->
+            <div class="space-y-3 bg-slate-900/80 p-4 rounded-xl border border-brand-border">
+              <span class="text-xs font-mono font-bold text-amber-400 uppercase block flex items-center gap-1.5">
+                <i data-lucide="help-circle" class="w-4 h-4"></i> Perguntas Norteadoras para Mediação e Avaliação:
+              </span>
+              <ul class="space-y-2 text-slate-300">
+                ${lesson.labMission.docentQuestions.map(dq => `
+                  <li class="p-2 rounded-lg bg-amber-950/20 border border-amber-900/40 text-amber-200/90 italic flex items-start gap-2">
+                    <span class="text-amber-400 font-bold shrink-0">?</span>
+                    <span>"${dq}"</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          </div>
+        </section>
+      `;
+
+      // Post-Render Tool Activation
+      if (lesson.id === 1) initParetoSimulator();
+      if (lesson.id === 2) generateLiveKPIBlueprint();
+      if (lesson.id === 4) calculatePaybackLive();
+      if (lesson.id === 5) updateABNTPattern();
+      if (lesson.id === 6) calculateBoardScore();
+
+      lucide.createIcons();
+    }
+
+    // HELPER: RENDER CASE STUDY TABLE
+    function renderCaseStudyTable(lesson) {
+      if (lesson.caseStudy.tableHeaders && lesson.caseStudy.tableRows) {
+        return `
+          <div class="overflow-x-auto rounded-xl border border-brand-border shadow-inner">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-800/90 text-cyan-400 font-mono uppercase text-[11px]">
+                <tr>
+                  ${lesson.caseStudy.tableHeaders.map(th => `<th class="p-3">${th}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-brand-border/60">
+                ${lesson.caseStudy.tableRows.map((row, idx) => `
+                  <tr class="${idx === 0 ? 'bg-cyan-950/20 font-medium text-white' : ''}">
+                    ${row.map((cell, cidx) => `
+                      <td class="p-3 ${cidx === 0 ? 'font-semibold text-white' : ''} ${cidx >= 2 ? 'font-mono' : ''}">${cell}</td>
+                    `).join('')}
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      // Aula 5: Texto ABNT
+      if (lesson.caseStudy.sampleABNTSection) {
+        const s = lesson.caseStudy.sampleABNTSection;
+        return `
+          <div class="p-4 rounded-xl bg-slate-950 border border-brand-border font-mono text-xs space-y-3">
+            <div class="text-cyan-400 font-bold border-b border-slate-800 pb-2">${s.tituloSecao}</div>
+            <div class="font-sans text-slate-200 leading-relaxed space-y-3 bg-brand-surface p-4 rounded-lg border border-slate-800">
+              <p class="indent-6">${s.paragrafo1}</p>
+              <p class="indent-6">${s.paragrafo2}</p>
+              <p class="indent-6">${s.paragrafo3}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      // Aula 6: Arguição Real
+      if (lesson.caseStudy.argutionList) {
+        return `
+          <div class="space-y-3">
+            ${lesson.caseStudy.argutionList.map(item => `
+              <div class="p-4 rounded-xl bg-brand-surface border border-brand-border space-y-2">
+                <div class="flex items-start gap-2.5 text-xs text-amber-300 font-medium">
+                  <i data-lucide="help-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                  <span>${item.interrogador}</span>
+                </div>
+                <div class="flex items-start gap-2.5 text-xs text-slate-200 pl-6 border-l-2 border-cyan-500/50 mt-2">
+                  <span>${item.respostaTecnica}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      return '';
+    }
+
+    // HELPER: RENDER INTERACTIVE TOOLS
+    function renderInteractiveTool(lesson) {
+      // Aula 1: Simulador Pareto Dinâmico
+      if (lesson.id === 1) {
+        return `
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div class="p-3 rounded-xl bg-slate-900 border border-brand-border">
+                <label class="block text-slate-400 font-mono mb-1">Doca sem Refrigeração (F1):</label>
+                <input type="number" id="paretoVal1" value="98" min="0" oninput="calculateParetoDynamic()" class="w-full bg-slate-800 border border-brand-border rounded-lg px-2.5 py-1.5 text-white font-mono">
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900 border border-brand-border">
+                <label class="block text-slate-400 font-mono mb-1">Falha Selagem Gelox (F2):</label>
+                <input type="number" id="paretoVal2" value="46" min="0" oninput="calculateParetoDynamic()" class="w-full bg-slate-800 border border-brand-border rounded-lg px-2.5 py-1.5 text-white font-mono">
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900 border border-brand-border">
+                <label class="block text-slate-400 font-mono mb-1">Erro Conferência Manual (F3):</label>
+                <input type="number" id="paretoVal3" value="21" min="0" oninput="calculateParetoDynamic()" class="w-full bg-slate-800 border border-brand-border rounded-lg px-2.5 py-1.5 text-white font-mono">
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900 border border-brand-border">
+                <label class="block text-slate-400 font-mono mb-1">Trânsito Last-Mile (F4):</label>
+                <input type="number" id="paretoVal4" value="12" min="0" oninput="calculateParetoDynamic()" class="w-full bg-slate-800 border border-brand-border rounded-lg px-2.5 py-1.5 text-white font-mono">
+              </div>
+            </div>
+
+            <!-- Pareto Bars Visualization -->
+            <div class="p-4 rounded-xl bg-slate-950 border border-brand-border space-y-3">
+              <div class="flex items-center justify-between text-xs font-mono text-cyan-400">
+                <span>CURVA DE ESTRATIFICAÇÃO PARETO (ORDENAÇÃO DE IMPACTO ACUMULADO)</span>
+                <span id="paretoTotalCount">Total: 177 falhas</span>
+              </div>
+              <div id="paretoBarsContainer" class="space-y-2">
+                <!-- Injected via calculateParetoDynamic -->
+              </div>
+              <div id="paretoVerdict" class="text-xs text-slate-300 pt-2 border-t border-slate-800">
+                <!-- Verdict injected here -->
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Aula 2: Construtor de Ficha de KPI
+      if (lesson.id === 2) {
+        return `
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">1. Nome Técnico do Indicador:</label>
+                <input type="text" id="kpiNomeInput" value="Taxa de Excursão Térmica na Doca (TET-D)" oninput="generateLiveKPIBlueprint()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">2. Natureza da Métrica:</label>
+                <select id="kpiNaturezaInput" onchange="generateLiveKPIBlueprint()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white">
+                  <option value="Lead (Métrica de Esforço / Preditiva)">Lead (Esforço / Preventiva)</option>
+                  <option value="Lag (Métrica de Resultado / Histórica)">Lag (Resultado / Reativa)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">3. Polaridade do Indicador:</label>
+                <select id="kpiPolaridadeInput" onchange="generateLiveKPIBlueprint()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white">
+                  <option value="Quanto menor, melhor (Almeja zero desvio)">Quanto menor, melhor</option>
+                  <option value="Quanto maior, melhor (Almeja 100% conformidade)">Quanto maior, melhor</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">4. Fórmula Paramétrica:</label>
+                <input type="text" id="kpiFormulaInput" value="(Total de Caixas com T > 8°C / Total Expedido) * 100" oninput="generateLiveKPIBlueprint()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white font-mono">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">5. Meta Operacional:</label>
+                <input type="text" id="kpiMetaInput" value="< 0.2% ao mês" oninput="generateLiveKPIBlueprint()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">6. Periodicidade & Responsável:</label>
+                <input type="text" id="kpiRespInput" value="Diário / Supervisor da Doca" oninput="generateLiveKPIBlueprint()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white">
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-950 border border-brand-border text-xs space-y-2">
+              <div class="flex items-center justify-between text-cyan-400 font-mono font-bold">
+                <span>BLUEPRINT OFICIAL DO INDICADOR GERADO:</span>
+                <button onclick="copyKPIToClipboard()" class="text-[11px] text-cyan-300 hover:underline flex items-center gap-1">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Ficha
+                </button>
+              </div>
+              <div id="kpiBlueprintOutput" class="font-mono text-slate-300 space-y-1 bg-brand-surface p-3 rounded-lg border border-slate-800">
+                <!-- Generated dynamically -->
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Aula 3: Árvore dos 5 Porquês Interativa
+      if (lesson.id === 3) {
+        return `
+          <div class="space-y-4">
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-brand-border text-xs flex items-center justify-between">
+              <div>
+                <span class="text-cyan-400 font-bold font-mono uppercase block">Problema Investigado:</span>
+                <span class="text-white">Cargas farmacêuticas atingem 11°C na doca de expedição antes do embarque.</span>
+              </div>
+              <span class="text-[11px] font-mono text-amber-400 bg-amber-950/60 px-2.5 py-1 rounded border border-amber-800">
+                Clique para avançar camadas
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs" id="fiveWhysButtons">
+              <button onclick="revealWhyLevel(1)" id="whyBtn1" class="p-3 rounded-xl bg-cyan-950 border border-cyan-700 text-cyan-300 text-left font-mono font-bold transition">1º Por quê?</button>
+              <button onclick="revealWhyLevel(2)" id="whyBtn2" class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-left font-mono font-bold transition">2º Por quê?</button>
+              <button onclick="revealWhyLevel(3)" id="whyBtn3" class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-left font-mono font-bold transition">3º Por quê?</button>
+              <button onclick="revealWhyLevel(4)" id="whyBtn4" class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-left font-mono font-bold transition">4º Por quê?</button>
+              <button onclick="revealWhyLevel(5)" id="whyBtn5" class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-left font-mono font-bold transition">5º Por quê (Raiz)?</button>
+            </div>
+
+            <div id="whyDetailBox" class="p-4 rounded-xl bg-slate-950 border border-brand-border text-xs text-slate-300">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        `;
+      }
+
+      // Aula 4: Calculadora de Payback & ROI Dinâmica
+      if (lesson.id === 4) {
+        return `
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">CAPEX Total do Projeto (R$):</label>
+                <input type="number" id="calcCapexInput" value="87000" step="1000" oninput="calculatePaybackLive()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white font-mono">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">Economia Mensal de Cargas Evitadas (R$):</label>
+                <input type="number" id="calcEconInput" value="14500" step="500" oninput="calculatePaybackLive()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white font-mono">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">OPEX Adicional Recorrente (R$/mês):</label>
+                <input type="number" id="calcOpexInput" value="1800" step="100" oninput="calculatePaybackLive()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white font-mono">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+              <div class="p-3.5 rounded-xl bg-slate-950 border border-brand-border">
+                <span class="text-[11px] text-slate-400 font-mono block">Ganho Líquido Operacional / Mês</span>
+                <span id="resGanhoLiquido" class="text-base font-bold text-cyan-400 font-mono">R$ 12.700,00</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-950 border border-brand-border">
+                <span class="text-[11px] text-slate-400 font-mono block">Payback Simples (Amortização)</span>
+                <span id="resPaybackMeses" class="text-base font-extrabold text-emerald-400 font-mono">6.9 Meses</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-950 border border-brand-border">
+                <span class="text-[11px] text-slate-400 font-mono block">ROI no 1º Ano de Implantação</span>
+                <span id="resRoi1Ano" class="text-base font-bold text-amber-400 font-mono">+ 75.2%</span>
+              </div>
+            </div>
+
+            <!-- Tabela 5W2H Sintetizada -->
+            <div class="p-4 rounded-xl bg-slate-950 border border-brand-border space-y-2">
+              <span class="text-xs font-mono font-bold text-cyan-400 uppercase block">Modelo Estruturado de Plano de Ação 5W2H:</span>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-[11px] text-slate-300">
+                  <thead class="bg-slate-800 text-cyan-300 font-mono">
+                    <tr>
+                      <th class="p-2">What (O que)</th>
+                      <th class="p-2">Why (Por que)</th>
+                      <th class="p-2">Where (Onde)</th>
+                      <th class="p-2">Who (Quem)</th>
+                      <th class="p-2">When (Quando)</th>
+                      <th class="p-2 text-right">How Much (Quanto)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800">
+                    <tr>
+                      <td class="p-2 font-medium text-white">Instalar 45 Sensores IoT LoRaWAN</td>
+                      <td class="p-2">Telemetria térmica contínua RDC 430</td>
+                      <td class="p-2">Docas 1, 2 e Staging</td>
+                      <td class="p-2">Engenheiro IoT</td>
+                      <td class="p-2">Mês 1 (Semana 1-3)</td>
+                      <td class="p-2 text-right font-mono text-cyan-400">R$ 37.000,00</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 font-medium text-white">Instalar Porta Seccional Isotérmica</td>
+                      <td class="p-2">Eliminar troca térmica com ar externo</td>
+                      <td class="p-2">Acesso Expedição</td>
+                      <td class="p-2">Engenharia Predial</td>
+                      <td class="p-2">Mês 1 (Semana 3-4)</td>
+                      <td class="p-2 text-right font-mono text-cyan-400">R$ 38.000,00</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 font-medium text-white">Treinamento Operacional dos Conferentes</td>
+                      <td class="p-2">Garantir uso correto do sistema WMS</td>
+                      <td class="p-2">Auditório CD</td>
+                      <td class="p-2">Supervisor de Qualidade</td>
+                      <td class="p-2">Mês 2 (Semana 1)</td>
+                      <td class="p-2 text-right font-mono text-cyan-400">R$ 12.000,00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Aula 5: Validador de Citações ABNT
+      if (lesson.id === 5) {
+        return `
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div>
+                <label class="block text-slate-400 font-mono mb-1">Selecione o Tipo de Documento / Fonte:</label>
+                <select id="abntSourceType" onchange="updateABNTPattern()" class="w-full bg-slate-900 border border-brand-border rounded-xl px-3 py-2 text-white">
+                  <option value="livro">Livro Técnico de Logística (1 Autor)</option>
+                  <option value="norma">Norma Técnica / Resolução Sanitária (ANVISA)</option>
+                  <option value="artigo">Artigo Científico em Periódico Especializado</option>
+                  <option value="site">Relatório Institucional / Website Corporativo</option>
+                </select>
+              </div>
+              <div class="flex items-end">
+                <span class="text-slate-400 text-[11px] pb-2 font-mono">Regulamentado pelas normas ABNT NBR 10520 e NBR 6023</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div class="p-4 rounded-xl bg-slate-950 border border-brand-border space-y-2">
+                <span class="text-cyan-400 font-mono font-bold block uppercase">Como Citar no Corpo do Texto:</span>
+                <div id="abntInTextExample" class="p-3 rounded-lg bg-brand-surface border border-slate-800 text-slate-200 italic font-sans leading-relaxed">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-950 border border-brand-border space-y-2">
+                <span class="text-emerald-400 font-mono font-bold block uppercase">Como Listar nas Referências Finais:</span>
+                <div id="abntRefListExample" class="p-3 rounded-lg bg-brand-surface border border-slate-800 text-slate-200 font-mono text-[11px] leading-relaxed">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Aula 6: Simulador de Arguição da Banca
+      if (lesson.id === 6) {
+        return `
+          <div class="space-y-4 text-xs">
+            <div class="p-4 rounded-xl bg-slate-900 border border-brand-border space-y-3">
+              <span class="font-mono text-cyan-400 font-bold block uppercase">Rubrica Avaliativa Oficial da Banca Simulada:</span>
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-300">1. Domínio da Situação-Problema e Evidências Numéricas:</span>
+                  <input type="range" id="b1" min="0" max="10" value="9" oninput="calculateBoardScore()" class="w-32 accent-cyan-500">
+                  <span id="b1v" class="font-mono text-cyan-400 font-bold w-6 text-right">9</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-300">2. Fundamentação Técnica da Solução e Análise Causal (Ishikawa):</span>
+                  <input type="range" id="b2" min="0" max="10" value="9" oninput="calculateBoardScore()" class="w-32 accent-cyan-500">
+                  <span id="b2v" class="font-mono text-cyan-400 font-bold w-6 text-right">9</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-300">3. Consistência Orçamentária, Payback e Plano 5W2H:</span>
+                  <input type="range" id="b3" min="0" max="10" value="8" oninput="calculateBoardScore()" class="w-32 accent-cyan-500">
+                  <span id="b3v" class="font-mono text-cyan-400 font-bold w-6 text-right">8</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-300">4. Postura Profissional, Trabalho em Equipe e Resposta às Arguições:</span>
+                  <input type="range" id="b4" min="0" max="10" value="10" oninput="calculateBoardScore()" class="w-32 accent-cyan-500">
+                  <span id="b4v" class="font-mono text-cyan-400 font-bold w-6 text-right">10</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-950 border border-brand-border flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div>
+                <span class="text-[11px] text-slate-400 font-mono block">NOTA FINAL CALCULADA DA BANCA:</span>
+                <span id="boardFinalScore" class="text-2xl font-extrabold text-cyan-400 font-mono">9.00 / 10.0</span>
+              </div>
+              <div id="boardScoreBadge" class="px-4 py-2 rounded-xl bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold">
+                Projeto Aprovado com Louvor Técnico
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      return '';
+    }
+
+    // INTERACTIVE TOOLS EXECUTION LOGIC
+
+    // Aula 1: Pareto Calculator
+    function initParetoSimulator() {
+      calculateParetoDynamic();
+    }
+
+    function calculateParetoDynamic() {
+      const v1 = parseFloat(document.getElementById('paretoVal1').value) || 0;
+      const v2 = parseFloat(document.getElementById('paretoVal2').value) || 0;
+      const v3 = parseFloat(document.getElementById('paretoVal3').value) || 0;
+      const v4 = parseFloat(document.getElementById('paretoVal4').value) || 0;
+
+      const items = [
+        { name: "F1: Doca de staging sem refrigeração rápida", val: v1 },
+        { name: "F2: Falha na selagem térmica com gelox", val: v2 },
+        { name: "F3: Erro de conferência manual de temperatura", val: v3 },
+        { name: "F4: Atrasos no trânsito de entrega (Last-Mile)", val: v4 }
+      ];
+
+      // Sort descending
+      items.sort((a, b) => b.val - a.val);
+
+      const total = items.reduce((acc, curr) => acc + curr.val, 0);
+      document.getElementById('paretoTotalCount').innerText = `Total: ${total} ocorrências`;
+
+      let accum = 0;
+      const container = document.getElementById('paretoBarsContainer');
+      container.innerHTML = '';
+
+      items.forEach((item, index) => {
+        accum += item.val;
+        const pctRel = total > 0 ? ((item.val / total) * 100).toFixed(1) : 0;
+        const pctAcc = total > 0 ? ((accum / total) * 100).toFixed(1) : 0;
+        const isVitalFew = pctAcc <= 80 || index === 0;
+
+        container.innerHTML += `
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="${isVitalFew ? 'text-white font-bold' : 'text-slate-400'}">${item.name}</span>
+              <span class="font-mono ${isVitalFew ? 'text-cyan-400 font-bold' : 'text-slate-500'}">${item.val} ocorrências (${pctRel}% | Acum: ${pctAcc}%)</span>
+            </div>
+            <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden flex">
+              <div class="${isVitalFew ? 'bg-gradient-to-r from-cyan-500 to-blue-500' : 'bg-slate-700'} h-full transition-all duration-300" style="width: ${pctRel}%"></div>
+            </div>
+          </div>
+        `;
+      });
+
+      const verdictEl = document.getElementById('paretoVerdict');
+      if (total > 0) {
+        verdictEl.innerHTML = `
+          <strong class="text-cyan-400">Diagnóstico Automático 80/20:</strong> As primeiras naturezas de falha destacadas respondem pela esmagadora maioria das quebras térmicas. Concentre 100% dos recursos do projeto na eliminação dessas causas para obter o maior retorno operacional.
+        `;
+      } else {
+        verdictEl.innerText = "Insira valores maiores que zero para simular a estratificação.";
+      }
+    }
+
+    // Aula 2: KPI Generator
+    function generateLiveKPIBlueprint() {
+      const nome = document.getElementById('kpiNomeInput')?.value || "Indicador";
+      const nat = document.getElementById('kpiNaturezaInput')?.value || "";
+      const pol = document.getElementById('kpiPolaridadeInput')?.value || "";
+      const form = document.getElementById('kpiFormulaInput')?.value || "";
+      const meta = document.getElementById('kpiMetaInput')?.value || "";
+      const resp = document.getElementById('kpiRespInput')?.value || "";
+
+      const out = document.getElementById('kpiBlueprintOutput');
+      if (!out) return;
+
+      out.innerHTML = `
+        <div>• <strong>NOME DO KPI:</strong> ${nome}</div>
+        <div>• <strong>CLASSIFICAÇÃO:</strong> ${nat}</div>
+        <div>• <strong>POLARIDADE:</strong> ${pol}</div>
+        <div>• <strong>FÓRMULA MATEMÁTICA:</strong> <span class="text-cyan-300 font-bold">${form}</span></div>
+        <div>• <strong>META CONTRATUAL:</strong> <span class="text-emerald-400 font-bold">${meta}</span></div>
+        <div>• <strong>FREQUÊNCIA E DONO:</strong> ${resp}</div>
+        <div>• <strong>GATILHO DE AÇÃO CORRETIVA:</strong> Acionamento obrigatório do comitê de engenharia caso a meta seja violada por 2 períodos consecutivos.</div>
+      `;
+    }
+
+    function copyKPIToClipboard() {
+      const text = document.getElementById('kpiBlueprintOutput').innerText;
+      copyToClipboardFallback(text, "Ficha de KPI copiada para a área de transferência!");
+    }
+
+    // Aula 3: 5 Whys Navigator
+    function revealWhyLevel(level) {
+      const box = document.getElementById('whyDetailBox');
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`whyBtn${i}`);
+        if (i <= level) {
+          btn.className = "p-3 rounded-xl bg-cyan-950 border border-cyan-600 text-cyan-300 text-left font-mono font-bold transition";
+        } else {
+          btn.className = "p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-left font-mono font-bold transition";
+        }
+      }
+
+      const whysData = {
+        1: {
+          q: "1º Por quê a temperatura do medicamento subiu acima de 8°C?",
+          a: "Porque a caixa térmica permaneceu parada na doca de expedição por 74 minutos em ambiente a 28°C."
+        },
+        2: {
+          q: "2º Por quê a carga permaneceu tanto tempo na doca?",
+          a: "Porque o conferente precisou bipar manualmente 180 frascos um a um com conferência visual em prancheta de papel."
+        },
+        3: {
+          q: "3º Por quê a conferência era manual e demorada?",
+          a: "Porque a doca não possui leitores fixos RFID/BLE nem integração automática dos sensores térmicos com o WMS da empresa."
+        },
+        4: {
+          q: "4º Por quê não há leitores nem integração tecnológica?",
+          a: "Porque a empresa operava no modelo logístico convencional de carga seca e não adaptou a infraestrutura para a RDC 430 da ANVISA."
+        },
+        5: {
+          q: "5º Por quê a infraestrutura não foi adaptada (Causa Raiz)?",
+          a: "CAUSA RAIZ GERENCIAL: Ausência de um Projeto de Engenharia Logística que especificasse a implantação de sensores IoT LoRaWAN em tempo real e portas seccionais automatizadas com cálculo de amortização de investimentos."
+        }
+      };
+
+      const item = whysData[level];
+      box.innerHTML = `
+        <div class="space-y-2 animate-fadeIn">
+          <div class="text-xs font-mono font-bold text-amber-300">${item.q}</div>
+          <p class="text-xs text-slate-200 leading-relaxed bg-brand-surface p-3 rounded-lg border border-slate-800">${item.a}</p>
+        </div>
+      `;
+    }
+
+    // Aula 4: Payback Calculator
+    function calculatePaybackLive() {
+      const capex = parseFloat(document.getElementById('calcCapexInput').value) || 0;
+      const econ = parseFloat(document.getElementById('calcEconInput').value) || 0;
+      const opex = parseFloat(document.getElementById('calcOpexInput').value) || 0;
+
+      const liquido = econ - opex;
+      const elLiq = document.getElementById('resGanhoLiquido');
+      const elPay = document.getElementById('resPaybackMeses');
+      const elRoi = document.getElementById('resRoi1Ano');
+
+      if (liquido <= 0) {
+        elLiq.innerText = `R$ ${liquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        elLiq.className = "text-base font-bold text-rose-400 font-mono";
+        elPay.innerText = "Inviável (Sem Retorno)";
+        elPay.className = "text-base font-extrabold text-rose-400 font-mono";
+        elRoi.innerText = "Negativo";
+        return;
+      }
+
+      const meses = (capex / liquido).toFixed(1);
+      const roi = (((liquido * 12) - capex) / capex * 100).toFixed(1);
+
+      elLiq.innerText = `R$ ${liquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+      elLiq.className = "text-base font-bold text-cyan-400 font-mono";
+      elPay.innerText = `${meses} Meses`;
+      elPay.className = "text-base font-extrabold text-emerald-400 font-mono";
+      elRoi.innerText = `${roi >= 0 ? '+' : ''}${roi}%`;
+      elRoi.className = `text-base font-bold ${roi >= 0 ? 'text-amber-400' : 'text-rose-400'} font-mono`;
+    }
+
+    // Aula 5: ABNT Pattern Formatter
+    function updateABNTPattern() {
+      const type = document.getElementById('abntSourceType').value;
+      const inText = document.getElementById('abntInTextExample');
+      const refList = document.getElementById('abntRefListExample');
+
+      if (type === 'livro') {
+        inText.innerHTML = `Segundo aponta Ballou (2006, p. 142), o custo logístico de não conformidade compromete a integridade de cadeias críticas... <br><br>Ou ao final do parágrafo: <br>[...] decorre da vulnerabilidade de processos analógicos (BALLOU, 2006).`;
+        refList.innerHTML = `BALLOU, Ronald H. <strong>Gerenciamento da Cadeia de Suprimentos / Logística Empresarial</strong>. 5. ed. Porto Alegre: Bookman, 2006.`;
+      } else if (type === 'norma') {
+        inText.innerHTML = `Conforme preconiza a Resolução RDC nº 430 da Agência Nacional de Vigilância Sanitária (BRASIL, 2020), o monitoramento de temperatura deve ser contínuo...`;
+        refList.innerHTML = `BRASIL. Ministério da Saúde. Agência Nacional de Vigilância Sanitária. <strong>Resolução da Diretoria Colegiada - RDC nº 430, de 8 de outubro de 2020</strong>. Dispõe sobre as Boas Práticas de Distribuição, Armazenagem e Transporte de Medicamentos. Brasília, DF: Diário Oficial da União, 2020.`;
+      } else if (type === 'artigo') {
+        inText.innerHTML = `De acordo com Silva e Souza (2023, p. 45), o tempo de payback em sistemas IoT logísticos tende a ser inferior a 12 meses...`;
+        refList.innerHTML = `SILVA, Marcos R.; SOUZA, Carlos E. Aplicação de telemetria LoRaWAN na rastreabilidade farmacêutica hospitalar. <strong>Revista Brasileira de Engenharia Logística</strong>, Curitiba, v. 14, n. 2, p. 41-58, jun. 2023.`;
+      } else {
+        inText.innerHTML = `Segundo dados divulgados pela Associação Brasileira de Logística (ABRALOG, 2024), a avaria em cadeia fria atinge índices de...`;
+        refList.innerHTML = `ABRALOG. <strong>Panorama da Logística Farmacêutica Nacional 2024</strong>. São Paulo: ABRALOG, 2024. Disponível em: &lt;https://www.abralog.com.br/relatorios&gt;. Acesso em: 15 maio 2024.`;
+      }
+    }
+
+    // Aula 6: Board Score Calculator
+    function calculateBoardScore() {
+      const b1 = parseFloat(document.getElementById('b1').value);
+      const b2 = parseFloat(document.getElementById('b2').value);
+      const b3 = parseFloat(document.getElementById('b3').value);
+      const b4 = parseFloat(document.getElementById('b4').value);
+
+      document.getElementById('b1v').innerText = b1;
+      document.getElementById('b2v').innerText = b2;
+      document.getElementById('b3v').innerText = b3;
+      document.getElementById('b4v').innerText = b4;
+
+      const media = ((b1 + b2 + b3 + b4) / 4).toFixed(2);
+      document.getElementById('boardFinalScore').innerText = `${media} / 10.0`;
+
+      const badge = document.getElementById('boardScoreBadge');
+      if (media >= 9.0) {
+        badge.innerText = "Projeto Aprovado com Louvor Técnico";
+        badge.className = "px-4 py-2 rounded-xl bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold";
+      } else if (media >= 7.0) {
+        badge.innerText = "Aprovado - Ajustar Recomendações Menores";
+        badge.className = "px-4 py-2 rounded-xl bg-blue-950 text-blue-300 border border-blue-800 text-xs font-bold";
+      } else {
+        badge.innerText = "Revisão Obrigatória de Escopo e Dados";
+        badge.className = "px-4 py-2 rounded-xl bg-rose-950 text-rose-300 border border-rose-800 text-xs font-bold";
+      }
+    }
+
+    // NOTES DRAWER AND LOCAL STORAGE LOGIC
+    function toggleNotesDrawer() {
+      const drawer = document.getElementById('notesDrawer');
+      drawer.classList.toggle('translate-x-full');
+    }
+
+    function saveCurrentLessonNote() {
+      const lessonNum = document.getElementById('notesLessonSelector').value;
+      const text = document.getElementById('projectNotesText').value;
+      localStorage.setItem(`senai_project_notes_aula_${lessonNum}`, text);
+
+      const status = document.getElementById('saveStatusIndicator');
+      status.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> Salvo localmente`;
+      lucide.createIcons();
+      updateNotesBadge();
+    }
+
+    function loadCurrentLessonNote() {
+      const lessonNum = document.getElementById('notesLessonSelector').value;
+      const saved = localStorage.getItem(`senai_project_notes_aula_${lessonNum}`) || '';
+      document.getElementById('projectNotesText').value = saved;
+      updateNotesBadge();
+    }
+
+    function loadNotesFromLocalStorage() {
+      loadCurrentLessonNote();
+    }
+
+    function updateNotesBadge() {
+      let hasAnyNotes = false;
+      for (let i = 1; i <= 6; i++) {
+        if (localStorage.getItem(`senai_project_notes_aula_${i}`)) {
+          hasAnyNotes = true;
+          break;
+        }
+      }
+      const badge = document.getElementById('notesBadge');
+      if (hasAnyNotes) {
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function copyCurrentNoteToClipboard() {
+      const text = document.getElementById('projectNotesText').value;
+      if (!text.trim()) {
+        alertFallback("Seu caderno está vazio para esta aula. Digite suas anotações antes de copiar.");
+        return;
+      }
+      copyToClipboardFallback(text, "Anotações do projeto copiadas!");
+    }
+
+    // UTILITIES
+    function copyToClipboardFallback(text, message) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        alertFallback(message);
+      } catch (err) {
+        console.error('Falha ao copiar:', err);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function alertFallback(msg) {
+      const notif = document.createElement('div');
+      notif.className = "fixed bottom-5 right-5 z-50 bg-cyan-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce";
+      notif.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> ${msg}`;
+      document.body.appendChild(notif);
+      lucide.createIcons();
+      setTimeout(() => {
+        notif.remove();
+      }, 3000);
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function openGlobalCaseModal() {
+      const modal = document.getElementById('globalCaseModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeGlobalCaseModal() {
+      const modal = document.getElementById('globalCaseModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  </script>
+</body>
+</html>
